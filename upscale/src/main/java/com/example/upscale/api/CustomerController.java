@@ -3,7 +3,10 @@ package com.example.upscale.api;
 
 import com.example.upscale.dto.request.RequestCustomerDto;
 import com.example.upscale.service.CustomerService;
+import com.example.upscale.utill.StandardResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,9 +16,12 @@ public class CustomerController {
 
     private final CustomerService customerService;
     @PostMapping
-    public String create(@RequestBody RequestCustomerDto dto){
+    public ResponseEntity<StandardResponse> create(@RequestBody RequestCustomerDto dto){
         customerService.create(dto);
-        return "create()";
+        return new ResponseEntity<>(
+                new StandardResponse(201,"Customer was created!..",null),
+                HttpStatus.CREATED
+        );
     }
 
     @PutMapping()
@@ -24,8 +30,11 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public String getById(@PathVariable String id){
-        return "getById()";
+    public ResponseEntity<StandardResponse> getById(@PathVariable String id){
+        return new ResponseEntity<>(
+                new StandardResponse(201,"Customer data!..",customerService.findById(id)),
+                HttpStatus.CREATED
+        );
     }
 
     @DeleteMapping()
